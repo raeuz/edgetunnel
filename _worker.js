@@ -83,6 +83,41 @@ let allowInsecure = '&allowInsecure=1';
  * practices for maintainability and security. Users can trust this code to perform
  * its intended functions without any risk of harm or data compromise.
  */
+// 在 fetch 事件处理中添加认证逻辑
+addEventListener('fetch', event => {
+  event.respondWith(handleRequest(event.request, event.env));
+});
+
+async function handleRequest(request, env) {
+  const url = new URL(request.url);
+  const path = url.pathname;
+
+  // 公开路径列表（不需要认证）
+  const publicPaths = ['/favicon.ico', '/static/', '/assets/'];
+  
+  // 如果不是公开路径，则需要认证
+  if (!publicPaths.some(p => path.startsWith(p))) {
+    // 检查认证头
+    const authHeader = request.headers.get('Authorization');
+    if (!authHeader || !authHeader.startsWith('Basic ')) {
+      return new Response('Unauthorized', {
+        status: 401,
+        headers: { 'WWW-Authenticate': 'Basic realm="clash-verge"' }
+      });
+    }
+
+    // 验证用户名密码
+    const [user, password] = atob(authHeader.split(' ')[1]).split(':');
+    if (user !== env.USERNAME || password !== env.PASSWORD) {
+      return new Response('Unauthorized', {
+        status: 401,
+        headers: { 'WWW-Authenticate': 'Basic realm="clash-verge"' }
+      });
+    }
+  }
+
+}
+
 export default {
     async fetch(request, env, ctx) {
         try {
@@ -5846,4 +5881,5 @@ async function 解析地址端口(proxyIP) {
         端口 = parseInt(proxyIP.slice(colonIndex + 1), 10) || 端口;
     }
     return [地址, 端口];
+
 }
