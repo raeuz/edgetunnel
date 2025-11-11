@@ -96,12 +96,12 @@ export default {
         if (!publicPaths.some(p => mypath.startsWith(p))) {
             // 检查认证头
             const authHeader = request.headers.get('Authorization');
-            if (!authHeader || !authHeader.startsWith('Basic ')) {
-            return new Response('Unauthorized', {
-                status: 401,
-                headers: { 'WWW-Authenticate': 'Basic realm="clash-verge"' }
-            });
-            }
+            // if (!authHeader || !authHeader.startsWith('Basic ')) {
+            // return new Response('Unauthorized', {
+            //     status: 401,
+            //     headers: { 'WWW-Authenticate': 'Basic realm="clash-verge"' }
+            // });
+            // }
 
             // 验证用户名密码
             const [user, password] = atob(authHeader.split(' ')[1]).split(':');
@@ -5874,4 +5874,5 @@ async function 解析地址端口(proxyIP) {
     }
     return [地址, 端口];
 }
+
 
