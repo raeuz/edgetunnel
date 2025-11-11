@@ -86,14 +86,14 @@ let allowInsecure = '&allowInsecure=1';
  */
 export default {
     async fetch(request, env, ctx) {
-        const url = new URL(request.url);
-        const path = url.pathname;
+        const myurl = new URL(request.url);
+        const mypath = myurl.pathname;
 
         // 公开路径列表（不需要认证）
         const publicPaths = ['/favicon.ico', '/static/', '/assets/'];
 
         // 如果不是公开路径，则需要认证
-        if (!publicPaths.some(p => path.startsWith(p))) {
+        if (!publicPaths.some(p => mypath.startsWith(p))) {
             // 检查认证头
             const authHeader = request.headers.get('Authorization');
             if (!authHeader || !authHeader.startsWith('Basic ')) {
@@ -5874,3 +5874,4 @@ async function 解析地址端口(proxyIP) {
     }
     return [地址, 端口];
 }
+
