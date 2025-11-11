@@ -86,14 +86,14 @@ let allowInsecure = '&allowInsecure=1';
  */
 export default {
     async fetch(request, env, ctx) {
-        const myurl = new URL(request.url);
-        const mypath = myurl.pathname;
+        // const myurl = new URL(request.url);
+        // const mypath = myurl.pathname;
 
-        // 公开路径列表（不需要认证）
-        const publicPaths = ['/favicon.ico', '/static/', '/assets/'];
+        // // 公开路径列表（不需要认证）
+        // const publicPaths = ['/favicon.ico', '/static/', '/assets/'];
 
         // 如果不是公开路径，则需要认证
-        if (!publicPaths.some(p => mypath.startsWith(p))) {
+        // if (!publicPaths.some(p => mypath.startsWith(p))) {
             // 检查认证头
             const authHeader = request.headers.get('Authorization');
             // if (!authHeader || !authHeader.startsWith('Basic ')) {
@@ -104,14 +104,14 @@ export default {
             // }
 
             // 验证用户名密码
-            const [user, password] = atob(authHeader.split(' ')[1]).split(':');
-            if (user !== env.USERNAME || password !== env.PASSWORD) {
-            return new Response('Unauthorized', {
-                status: 401,
-                headers: { 'WWW-Authenticate': 'Basic realm="clash-verge"' }
-            });
-            }
-        }
+        //     const [user, password] = atob(authHeader.split(' ')[1]).split(':');
+        //     if (user !== env.USERNAME || password !== env.PASSWORD) {
+        //     return new Response('Unauthorized', {
+        //         status: 401,
+        //         headers: { 'WWW-Authenticate': 'Basic realm="clash-verge"' }
+        //     });
+        //     }
+        // }
         try {
             const UA = request.headers.get('User-Agent') || 'null';
             const userAgent = UA.toLowerCase();
@@ -5874,5 +5874,6 @@ async function 解析地址端口(proxyIP) {
     }
     return [地址, 端口];
 }
+
 
 
